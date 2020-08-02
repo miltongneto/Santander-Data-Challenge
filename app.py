@@ -4,7 +4,7 @@ import numpy as np
 
 from src.preprocess_olist import get_olist_data
 from src.plots import *
-from src.utils import dict_columns
+from src.utils import dict_columns, get_download_excel
 import os
 
 
@@ -71,6 +71,12 @@ def main():
     
     if page == 'Vendas':
         load_home(data)
+
+    st.sidebar.markdown('Baixar template')
+    download_button = st.sidebar.button('Download')
+    if download_button:
+        df_template = pd.read_excel('data/Planilha Template.xlsx')
+        get_download_excel(df_template)
     
 
 
