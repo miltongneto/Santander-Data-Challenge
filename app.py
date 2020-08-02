@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-from preprocess_olist import get_olist_data
-from plots import *
-from utils import dict_columns
+from src.preprocess_olist import get_olist_data
+from src.plots import *
+from src.utils import dict_columns
 import os
 
 
@@ -67,13 +67,13 @@ def main():
     st.title('Santander Data Challenge')
     
     
-    files_str = str(os.listdir('../'))
+    files_str = str(os.listdir())
     st.write(files_str)
 
-    files_str = str(os.listdir('../data/'))
+    files_str = str(os.listdir('data/'))
     st.write(files_str)
 
-    files_str = str(os.listdir('../data/olist/'))
+    files_str = str(os.listdir('data/olist/'))
     st.write(files_str)
 
     data = create_default_menu()

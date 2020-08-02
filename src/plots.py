@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
-from utils import fill_date_range, dict_dayofweek
+from src.utils import fill_date_range, dict_dayofweek
 
 def plot_indicators(x, y):
     x_max = x*1.2
