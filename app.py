@@ -65,17 +65,6 @@ def load_home(data):
 
 def main():
     st.title('Santander Data Challenge')
-    
-    
-    files_str = str(os.listdir())
-    st.write(files_str)
-
-    files_str = str(os.listdir('data/'))
-    st.write(files_str)
-
-    files_str = str(os.listdir('data/olist/'))
-    st.write(files_str)
-
     data = create_default_menu()
 
     page = st.sidebar.radio('Selecionar página:', ['Vendas', 'Perfil dos Clientes', 'Avaliações'])

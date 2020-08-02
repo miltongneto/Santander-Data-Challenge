@@ -3,11 +3,11 @@ import streamlit as st
 
 st.cache
 def get_olist_data():
-    df_products = pd.read_csv('../data/olist/olist_products_dataset.csv')
-    df_orders_items = pd.read_csv('../data/olist/olist_order_items_dataset.csv')
-    df_orders_dataset = pd.read_csv('../data/olist/olist_orders_dataset.csv')
-    df_customers = pd.read_csv('../data/olist/olist_customers_dataset.csv')
-    df_geolocation = pd.read_csv('../data/olist/olist_geolocation_dataset.csv')
+    df_products = pd.read_csv('data/olist/olist_products_dataset.csv')
+    df_orders_items = pd.read_csv('data/olist/olist_order_items_dataset.csv')
+    df_orders_dataset = pd.read_csv('data/olist/olist_orders_dataset.csv')
+    df_customers = pd.read_csv('data/olist/olist_customers_dataset.csv')
+    df_geolocation = pd.read_csv('data/olist/olist_geolocation_dataset.csv')
 
 
     df_prod_filtered = df_products[df_products['product_category_name'] == 'beleza_saude']
