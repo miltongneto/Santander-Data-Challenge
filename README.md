@@ -1,10 +1,10 @@
 # Introdução
 
-Este repositório foi criado para armazenar os notebooks e scripts para o data challend Santander segunda edição. Neste 
+Este repositório foi criado para armazenar os notebooks e scripts para o data challenge Santander segunda edição. A solução proposta conta com um storytelling com dados e um dashboard para análise de vendas de pequenas empresas. A partir de uma planilha template (definindo as colunas) e um a preparação de um formulário para levantar dados sobre o perfil do cliente, é possível iniciar o processo de analytics em algumas empresas. O dashboard utiliza dados de pequenas empresas da base de e-commerce da Olist.
 
 ## Descrição do projeto
 
-Fizemos analise de tal e tal e criamos um dashboard para isso e isso
+O projeto foi desenvolvido em Python utilizando libs para análise de dados (pandas, matplotlib, plotly, etc). Além dessas, foi utilizado o framework Streamit para criar um dashboard  que permite o input de dados e gera gráficos interativos automaticamente.
 
 ## Dashbord na web
 
