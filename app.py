@@ -27,7 +27,17 @@ def create_default_menu():
     return data
 
 def get_indicators(data):
-    return 12, 10 
+    ts_revenue = data.groupby(data['shipping_limit_date'])['price'].sum()
+    ts_revenue = fill_date_range(ts_revenue)
+    ts_revenue = ts_revenue.resample('M').sum()
+    revenue_current_month = ts_revenue.iloc[-1]
+
+    ts_orders = data.groupby('shipping_limit_date')['order_id'].nunique()
+    ts_orders = fill_date_range(ts_orders)
+    ts_orders_month = ts_orders.resample('M').sum()
+    orders_current_month = ts_orders_month.iloc[-1]
+
+    return revenue_current_month, orders_current_month 
 
 def get_reviews(data, ascending=False):
     df_reviews = data.dropna(subset=['review_comment_title', 'review_comment_message']).sort_values(by=['review_score', 'shipping_limit_date'], ascending=ascending).iloc[:3]

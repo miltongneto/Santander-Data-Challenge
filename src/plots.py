@@ -8,8 +8,8 @@ from wordcloud import WordCloud
 
 
 def plot_indicators(x, y):
-    x_max = x*1.2
-    y_max = y*1.4
+    x_max = x*1.1
+    y_max = y*1.2
 
     fig = go.Figure()
 
@@ -17,8 +17,9 @@ def plot_indicators(x, y):
         go.Indicator(
             value=x,
             mode='gauge+number',
-            title=dict(text='Indicador 1'),
-            gauge=dict(axis=dict(range=[None, x_max])),
+            number=dict(prefix='R$ '),
+            title=dict(text='<b>Receita (R$)</b>'),
+            gauge=dict(axis=dict(range=[None, x_max]), bar=dict(color='#3366CC')),
             domain=dict(x=[0,0.4])
         )
     )
@@ -27,13 +28,13 @@ def plot_indicators(x, y):
         go.Indicator(
             value=y,
             mode='gauge+number',
-            title=dict(text='Indicador 2'),
-            gauge=dict(axis=dict(range=[None, y_max])),
-            domain=dict(x=[0.5,1])
+            title=dict(text='<b>Quantidade de ordens</b>'),
+            gauge=dict(axis=dict(range=[None, y_max]), bar=dict(color='#3366CC')),
+            domain=dict(x=[0.5,0.9])
         )
     )
 
-    fig.update_layout(height=250)
+    fig.update_layout(height=200, margin=dict(t=20, b=0))
 
     return fig
 
