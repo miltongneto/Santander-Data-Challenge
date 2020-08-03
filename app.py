@@ -13,6 +13,8 @@ def prepare_data_sheet(data):
     return data
 
 def create_default_menu():
+    st.sidebar.title('Dado Fácil')
+
     data = pd.DataFrame()
     uploaded_file = st.sidebar.file_uploader('Importar planilha:', type=['xlsx'])
 
@@ -33,8 +35,28 @@ def get_reviews(data, ascending=False):
     reviews = df_reviews[['review_comment_title', 'review_comment_message', 'review_score']].values
     return reviews
 
+
+def filter_home(data):
+    products = data['product_id'].unique()
+    products_filter = st.sidebar.multiselect('Filtrar produtos:', products)
+    if products_filter:
+        data = data[data['product_id'].isin(products_filter)]
+
+    states = data['geolocation_state'].unique()
+    states_filter = st.sidebar.multiselect('Filtrar estados:', states)
+    if products_filter:
+        data = data[data['geolocation_state'].isin(states_filter)]
+
+    limits_price = (0.0, data['price'].max())
+    price_filter = st.sidebar.slider(label='Limitar preço', min_value=0.0, max_value=data['price'].max(), value=limits_price)
+    if price_filter != limits_price:
+        data = data[(data['price'] >= limits_price[0]) & data['price'] <= limits_price[1]]
+    
+    return data
+
 def load_home(data):
     st.write("## Informações sobre as vendas")
+    data = filter_home(data)
 
     x, y = get_indicators(data)
     st.plotly_chart(plot_indicators(x, y))
@@ -69,6 +91,8 @@ def load_home(data):
     st.write('### Quantidade de pedidos por localização')
     st.plotly_chart(plot_sales_location(data))
 
+    # st.sidebar.markdown("---")
+
 
 def load_customers(data):
     st.write("## Informações dos perfis dos clientes")
@@ -94,40 +118,50 @@ def load_customers(data):
 
 def load_reviews(data):
     st.write("## Informações das avaliações dos clientes")
+    if 'review_id' in data.columns:
+        st.write("## Porcentagem de produtos avaliados")
+        st.plotly_chart(plot_review_count(data))
 
-    st.write("## Porcentagem de produtos avaliados")
-    st.plotly_chart(plot_review_count(data))
+        st.write("## Avaliação dos produtos por nota")
+        st.plotly_chart(plot_review_count_details(data))
 
-    st.write("## Avaliação dos produtos por nota")
-    st.plotly_chart(plot_review_count_details(data))
-
-    st.write("## Nuvem de Palavras")
-    
-    st.write("## Palavras para avaliações boas")
-    plot_wordcloud(data, 'good')
-    st.pyplot()
-
-    st.write("## Palavras para avaliações ruins")
-    plot_wordcloud(data, 'bad')
-    st.pyplot()
-
-    st.write("## Principais comentários")
-
-    st.write("### Comentários positivos")
-    best_reviews = get_reviews(data, False)
-    for review in best_reviews:
-        st.markdown('#### "{}" - {}'.format(review[0], review[2]))
-        st.text('"{}"'.format(review[1]))
+        st.write("## Nuvem de Palavras")
         
-    st.write("### Comentários negativos")
-    worse_reviews = get_reviews(data, True)
-    for review in worse_reviews:
-        st.markdown('#### "{}" - {}'.format(review[0], review[2]))
-        st.text('"{}"'.format(review[1]))
+        st.write("## Palavras para avaliações boas")
+        plot_wordcloud(data, 'good')
+        st.pyplot()
+
+        st.write("## Palavras para avaliações ruins")
+        plot_wordcloud(data, 'bad')
+        st.pyplot()
+
+        st.write("## Principais comentários")
+
+        st.write("### Comentários positivos")
+        best_reviews = get_reviews(data, False)
+        for review in best_reviews:
+            st.markdown('#### "{}" - {}'.format(review[0], review[2]))
+            st.text('"{}"'.format(review[1]))
+            
+        st.write("### Comentários negativos")
+        worse_reviews = get_reviews(data, True)
+        for review in worse_reviews:
+            st.markdown('#### "{}" - {}'.format(review[0], review[2]))
+            st.text('"{}"'.format(review[1]))
+    else:
+        st.info("Sem avaliações na base de dados")
     
 def main():
-    st.title('Santander Data Challenge')
+    st.title('Dado Fácil')
     data = create_default_menu()
+
+    st.sidebar.markdown('---')
+    st.sidebar.markdown('Baixar template')
+    download_button = st.sidebar.button('Download')
+    if download_button:
+        df_template = pd.read_excel('data/Planilha Template.xlsx')
+        get_download_excel(df_template)
+    st.sidebar.markdown('---')
 
     page = st.sidebar.radio('Selecionar página:', ['Vendas', 'Perfil dos Clientes', 'Avaliações'])
     
@@ -139,11 +173,7 @@ def main():
         load_reviews(data)
     
 
-    st.sidebar.markdown('Baixar template')
-    download_button = st.sidebar.button('Download')
-    if download_button:
-        df_template = pd.read_excel('data/Planilha Template.xlsx')
-        get_download_excel(df_template)
+    
     
 
 
