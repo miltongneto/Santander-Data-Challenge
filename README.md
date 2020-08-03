@@ -14,7 +14,7 @@ O projeto foi desenvolvido em Python utilizando libs para análise de dados (pan
 * Python 3
 * Plotly
 * Jupyter Notebook
-* Aquela ferramenta para fazer o dashboard
+* Streamlit
 
 ## Datasets
 1. Yahoo Finanças:
@@ -23,7 +23,7 @@ O projeto foi desenvolvido em Python utilizando libs para análise de dados (pan
   * [VVAR3](https://br.financas.yahoo.com/quote/VVAR3.SA/history?p=VVAR3.SA&.tsrc=fin-srch).
   * [MGLU3](https://br.financas.yahoo.com/quote/MGLU3.SA/history?p=MGLU3.SA&.tsrc=fin-srch).
 2. [Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/olistbr/brazilian-ecommerce)
-3. 
+3. [ONS UK](https://www.ons.gov.uk/businessindustryandtrade/retailindustry/timeseries/j4mc/drsi)
 
 ## Começando
 
