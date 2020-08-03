@@ -8,6 +8,7 @@ def get_olist_data():
     df_orders_dataset = pd.read_csv('data/olist/olist_orders_dataset.csv')
     df_customers = pd.read_csv('data/olist/olist_customers_dataset.csv')
     df_geolocation = pd.read_csv('data/olist/olist_geolocation_dataset.csv')
+    df_orders_reviews = pd.read_csv("data/olist/olist_order_reviews_dataset.csv")
 
 
     df_prod_filtered = df_products[df_products['product_category_name'] == 'beleza_saude']
@@ -27,5 +28,7 @@ def get_olist_data():
 
     df_oders_filtered['shipping_limit_date'] = pd.to_datetime(df_oders_filtered['shipping_limit_date'])
     df_oders_filtered['shipping_limit_date'] = df_oders_filtered['shipping_limit_date'].dt.to_period('D').dt.to_timestamp()
+
+    df_oders_filtered = pd.merge(df_oders_filtered, df_orders_reviews[['order_id', 'review_score', 'review_id', 'review_comment_title', 'review_comment_message']], on='order_id', how='left')
 
     return df_oders_filtered

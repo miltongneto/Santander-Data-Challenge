@@ -44,3 +44,23 @@ def get_download_excel(data):
     b64 = base64.b64encode(excel).decode()
     href = f'<a href="data:application/octet-stream;base64,{b64}" download="Template.xlsx">Download XLSX File</a>'
     st.sidebar.markdown(href, unsafe_allow_html=True)
+
+
+def load_stopwords():
+    a_file = open("data/stopwords.txt", "r")
+    stopwords = []
+
+    for line in a_file:
+        
+        stripped_line = line.strip()
+
+        stopwords.append(stripped_line)
+
+    a_file.close()
+
+    return stopwords
+
+def get_customers_data():
+    data = pd.read_excel('data/respostas_forms.xlsx')
+    data.columns = ['simestamp', 'sex', 'age', 'channel', 'social_media', 'promo']
+    return data

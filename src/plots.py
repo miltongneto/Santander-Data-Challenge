@@ -1,8 +1,11 @@
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
+import matplotlib.pyplot as plt
 from plotly.subplots import make_subplots
-from src.utils import fill_date_range, dict_dayofweek
+from src.utils import fill_date_range, dict_dayofweek, load_stopwords
+from wordcloud import WordCloud
+
 
 def plot_indicators(x, y):
     x_max = x*1.2
@@ -137,4 +140,117 @@ def plot_sales_location(data):
     )
     fig.update_layout(height=500, yaxis=dict(title='Estado'), xaxis=dict(title='Pedidos'), showlegend=False)
 
+    return fig
+
+
+def plot_review_count(data):
+    reviews_count = data.drop_duplicates(subset=['order_id'])['price'].notnull().sum()
+    reviews_percentage = reviews_count / data.drop_duplicates(subset=['order_id']).shape[0]
+    reviews_percentage = reviews_percentage * 100
+
+    labels = ['Avaliados','Não avaliados']
+    values = [reviews_percentage, 100 - reviews_percentage]
+
+    fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
+
+    return fig
+
+def plot_review_count_details(data):
+    df_reviews_count = data.drop_duplicates(subset=['order_id'])[['review_score', 'review_id', 'review_comment_message']].groupby('review_score').count()
+    
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Bar(x=df_reviews_count.index, y=df_reviews_count['review_id'], name='Avaliações')
+    )
+
+    fig.add_trace(
+        go.Bar(x=df_reviews_count.index, y=df_reviews_count['review_comment_message'], name='Avaliações com mensagens')
+    )
+
+    # margin=dict(l=0,r=0), legend=dict(x=-1.2, y=1.2), legend_orientation='h'
+    fig.update_layout(height=500, width=700, barmode='overlay', yaxis=dict(title='Quantidade'), xaxis=dict(title='Nota da avaliação'))
+    
+    return fig
+
+def plot_wordcloud(data, score_level='bad'):
+    stopwords = load_stopwords()
+    
+    if score_level == 'bad':
+        companies_filtered_type = data[data["review_score"] <= 3].dropna(subset=['review_comment_message'])
+    else:
+        companies_filtered_type = data[data["review_score"] > 3].dropna(subset=['review_comment_message'])
+
+    wordcloud = WordCloud(stopwords = stopwords).generate(' '.join(companies_filtered_type['review_comment_message']))
+    
+    plt.imshow(wordcloud)
+    plt.axis("off")
+
+
+def plot_genre(data):
+    print(data)
+    df_sex_count = data['sex'].value_counts()
+
+    fig = go.Figure(data=[go.Pie(labels=df_sex_count.index, values=df_sex_count)])
+    return fig
+
+def plot_age(data):
+    df_age_count = data['age'].value_counts()
+    df_age_count = df_age_count.loc[['Até 17 anos', 'De 18 a 24 anos', 'De 25 a 35 anos', 'De 36 a 50 anos', 'A partir de 51 anos']]
+
+    fig = go.Figure(
+            go.Bar(y=df_age_count.index, x=df_age_count, text=df_age_count, textposition='outside', orientation='h')
+                
+    )
+    return fig
+
+def plot_channel_purchase(data):
+    df_social_media_count = data['channel'].value_counts()
+    df_social_media_percent = df_social_media_count / data.shape[0]
+    df_social_media_percent = (df_social_media_percent * 100).round(2)
+
+    fig = go.Figure(
+            go.Bar(
+                y=df_social_media_percent.index, x=df_social_media_percent,
+                texttemplate='%{text}%', text=df_social_media_percent,
+                textposition='outside', orientation='h'
+            )
+    )
+
+    fig.update_layout(
+        height=500, yaxis=dict(title='Canais de compra'), 
+        xaxis=dict(title='Percentual de utilização', range=[0, df_social_media_percent.max() + 5]))
+
+    return fig
+
+def plot_social_media_usage(data):
+    df_media = pd.Series(data['social_media'].apply(lambda x: x.split(', ')).sum()).value_counts()
+    
+    fig = go.Figure(
+            go.Bar(x=df_media.index, y=df_media, text=df_media, textposition='outside')
+                
+    )
+
+    fig.update_layout(yaxis=dict(title='Quantidade de usuários'), xaxis=dict(title='Rede Social'))
+    return fig
+
+def plot_genre_age(data):
+    df_genre_age = data.groupby(['age'])['sex'].value_counts(normalize=True).unstack()
+    df_genre_age = (df_genre_age * 100).round(2)
+
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Bar(
+            x=df_genre_age.index, y=df_genre_age['Masculino'], name='Masculino'
+        )
+    )
+
+    fig.add_trace(
+        go.Bar(
+            x=df_genre_age.index, y=df_genre_age['Feminino'], name='Feminino'
+        )
+    )
+
+    fig.update_layout(yaxis=dict(title='Percentual de clientes', ticksuffix='%'), xaxis=dict(title='Faixa etária'), legend_title_text='Sexo')
     return fig
