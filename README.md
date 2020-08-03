@@ -40,10 +40,7 @@ Use [pip3](https://pip.pypa.io/en/stable/) para instalar as bibliotecas necessá
 pip3 install -r requirements.txt.
 ```
 ### Ordem de leitura dos notebooks
-
-1. [script1](https://github.com/miltongneto/Santander-Data-Challenge/tree/master/data). 
-2. [2](https://github.com/miltongneto/Santander-Data-Challenge/tree/master/notebooks).
-3. [3](https://github.com/miltongneto/Santander-Data-Challenge/tree/master/src).
+Os notebooks foram utilizados para análise exploratória dos dados. A pasta notebooks_storytelling apresenta um Storytelling com Dados, com a numeração no início do arquivo para indicar a ordem. A análise segue do contexto macro para o micro, saindo da econômia no nível nacional e de grandes empresas para pequenas empresas e descoberta de padrões e dentências.
 
 ### Rodar o Dashboard
 
